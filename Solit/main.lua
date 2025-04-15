@@ -5,8 +5,9 @@ io.stdout:setvbuf("no")
 require "card"
 
 function love.load()
+  math.randomseed(os.time())
   screenWidth = 960
-  screenHeight = 600
+  screenHeight =960 
   onex=150
   twox=250
   threex=350
@@ -163,6 +164,7 @@ function love.mousereleased(x, y, button)
   
   end
 end
+
 function clear(stack, card)
   for i = #stack, 1, -1 do
     if stack[i] == card then
@@ -177,7 +179,7 @@ function viable(x,y)
     table.insert(one, 1,draggingCard)  
     draggingCard.sourceStack = "one"
     prevx = onex
-    prevy = 50 * #one
+    prevy = 100* (#one-1)
   end
  
     if x>twox-49 and x<twox+49 and draggingCard.sourceStack~="two"and checkInsert(draggingCard,two)==true then
@@ -186,7 +188,7 @@ function viable(x,y)
     
     draggingCard.sourceStack="two"
     prevx=twox
-    prevy=50*#two
+    prevy=100*(#two-1)
   end 
  if x>threex-49 and x<threex+49 and draggingCard.sourceStack~="three" and checkInsert(draggingCard,three)==true then
      removeFromStack( draggingCard)
@@ -194,7 +196,7 @@ function viable(x,y)
     
     draggingCard.sourceStack="three"
     prevx=threex
-    prevy=50*#three
+    prevy=100*(#three-1)
   end
   if x>fourx-49 and x<fourx+49 and draggingCard.sourceStack~="four" and checkInsert(draggingCard,four)==true then
       removeFromStack( draggingCard)
@@ -202,7 +204,7 @@ function viable(x,y)
   
     draggingCard.sourceStack="four"
     prevx=fourx
-    prevy=50*#four
+    prevy=100*(#four-1)
   end
   if x>fivex-49 and x<fivex+49 and draggingCard.sourceStack~="five"and checkInsert(draggingCard,five)==true then
       removeFromStack( draggingCard)
@@ -210,7 +212,7 @@ function viable(x,y)
   
     draggingCard.sourceStack="five"
     prevx=fivex
-    prevy=50*#five
+    prevy=100*(#five-1)
   end
   if x>sixx-49 and x<sixx+49  and draggingCard.sourceStack~="six" and checkInsert(draggingCard,six)==true then
         removeFromStack( draggingCard)
@@ -218,7 +220,7 @@ function viable(x,y)
 
     draggingCard.sourceStack="six"
     prevx=sixx
-    prevy=49*#six
+    prevy=100*(#six-1)
   end
  if x>sevenx-49 and x<sevenx+49 and draggingCard.sourceStack~="seven" and checkInsert(draggingCard,seven)==true then
        removeFromStack( draggingCard)
@@ -226,7 +228,7 @@ function viable(x,y)
 
     draggingCard.sourceStack="seven"
     prevx=sevenx
-    prevy=49*#seven
+    prevy=100*(#seven-1)
   end
   if x>sevenx+100 and y<150 and draggingCard.sourceStack~="hearts" and checkscore(draggingCard,"Hearts")==true then
     removeFromStack( draggingCard)
@@ -271,17 +273,21 @@ function check_draggable()
         for _, stack in ipairs(possibleStacks) do
           if #stack> 0 then
           stack[1].face=true
-          table.insert(draggable,stack[1])
-          end
+         
+        end
+        for _, card in ipairs(stack) do
+          if card.face==true then
+         table.insert(draggable,card)
+         end
           end
 end
-
+end 
 function start()
   for i =1,1,-1 do
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 50*i
+       offset= 100*(i-1)
        card.sourceStack="one"
        card.position=Vector(onex,0+offset)
        table.insert(visible, card) 
@@ -292,7 +298,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 50*i
+       offset= 100*(i-1)
        card.sourceStack="two"
        card.position=Vector(twox,offset)
        table.insert(visible, card) 
@@ -303,7 +309,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 50*i
+       offset= 100*(i-1)
        card.sourceStack="three"
        card.position=Vector(threex,offset)
        table.insert(visible, card) 
@@ -314,7 +320,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 50*i
+       offset=100*(i-1)
        card.sourceStack="four"
        card.position=Vector(fourx,offset)
        table.insert(visible, card) 
@@ -325,7 +331,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 50*i
+       offset= 100*(i-1)
        card.sourceStack="five"
        card.position=Vector(fivex,offset)
        table.insert(visible, card) 
@@ -337,7 +343,7 @@ function start()
        local card = deck[index]
        card.face=false
        card.sourceStack="six"
-       offset= 50*i
+       offset= 100*(i-1)
        card.position=Vector(sixx,offset)
        table.insert(visible, card) 
        table.insert(six, card) 
@@ -348,7 +354,7 @@ function start()
        local card = deck[index]
        card.face=false
        card.sourceStack="seven"
-       offset= 50*i
+       offset=100*(i-1)
        card.position=Vector(sevenx,offset)
        table.insert(visible, card) 
        table.insert(seven, card) 
@@ -429,6 +435,10 @@ function checkInsert(card,cards)
 }
 ccard=cards[1]
   rank=card.rank
+  if rank == "King" and #cards ==0 then 
+    return true
+  end
+  
   print(rankIndex[rank]+1,rankIndex[ccard.rank])
   if rankIndex[ccard.rank] ~=rankIndex[rank]+1 then
     return false

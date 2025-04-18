@@ -17,6 +17,7 @@ function CardClass:new(x, y, suit, rank, image)
   card.scale = 0.1
   card.sourceStack = nil
   card.face = true
+  backImage = love.graphics.newImage("Assets/back.png")
   return card
 end
 
@@ -38,7 +39,8 @@ function CardClass:draw()
    love.graphics.draw(self.image, self.position.x, self.position.y, 0, self.scale, self.scale)
   end 
   if self.face == false then
-    love.graphics.setColor(0, 0, 0)
-   love.graphics.draw(self.image, self.position.x, self.position.y, 0, self.scale, self.scale)
+    love.graphics.setColor(1, 1, 1)
+    
+   love.graphics.draw(backImage, self.position.x-16, self.position.y, 0, self.scale*1.38, self.scale*1.3)
   end 
 end

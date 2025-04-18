@@ -58,7 +58,7 @@ function love.load()
 end
 
 function love.update()
-  
+ 
   for _, card in ipairs(draggable) do
     card:update()
   end
@@ -83,14 +83,18 @@ love.graphics.rectangle("line", 880, 240, 65, 90)
 love.graphics.print("clubs", 900, 280)
 love.graphics.rectangle("line", 880, 340, 65, 90)
 love.graphics.print("spades", 900, 380)
-  for _, card in ipairs(visible) do
-    card:draw()
+local visiblelist = {draw,hearts,tiles,clovers,pikes,one,two,three,four,five,six,seven}
+for _, list in ipairs(visiblelist) do
+   for i = #list, 1, -1 do
+    list[i]:draw()
+  end
   end
 end
 
 function love.mousepressed(x, y, button)
   check_draggable()
   if button == 1 then
+    
     for i = #draggable, 1, -1 do
       local card = draggable[i]
       if card:isMouseOver(x, y) then
@@ -174,12 +178,14 @@ function clear(stack, card)
   end
 end
 function viable(x,y)
+  offsety=60
+  
   if x > onex - 49 and x < onex + 49 and draggingCard.sourceStack ~= "one" and checkInsert(draggingCard,one)==true then
     removeFromStack(draggingCard)  
     table.insert(one, 1,draggingCard)  
     draggingCard.sourceStack = "one"
     prevx = onex
-    prevy = 100* (#one-1)
+    prevy = offsety* (#one-1)
   end
  
     if x>twox-49 and x<twox+49 and draggingCard.sourceStack~="two"and checkInsert(draggingCard,two)==true then
@@ -188,7 +194,7 @@ function viable(x,y)
     
     draggingCard.sourceStack="two"
     prevx=twox
-    prevy=100*(#two-1)
+    prevy=offsety*(#two-1)
   end 
  if x>threex-49 and x<threex+49 and draggingCard.sourceStack~="three" and checkInsert(draggingCard,three)==true then
      removeFromStack( draggingCard)
@@ -196,7 +202,7 @@ function viable(x,y)
     
     draggingCard.sourceStack="three"
     prevx=threex
-    prevy=100*(#three-1)
+    prevy=offsety*(#three-1)
   end
   if x>fourx-49 and x<fourx+49 and draggingCard.sourceStack~="four" and checkInsert(draggingCard,four)==true then
       removeFromStack( draggingCard)
@@ -204,7 +210,7 @@ function viable(x,y)
   
     draggingCard.sourceStack="four"
     prevx=fourx
-    prevy=100*(#four-1)
+    prevy=offsety*(#four-1)
   end
   if x>fivex-49 and x<fivex+49 and draggingCard.sourceStack~="five"and checkInsert(draggingCard,five)==true then
       removeFromStack( draggingCard)
@@ -212,7 +218,7 @@ function viable(x,y)
   
     draggingCard.sourceStack="five"
     prevx=fivex
-    prevy=100*(#five-1)
+    prevy=offsety*(#five-1)
   end
   if x>sixx-49 and x<sixx+49  and draggingCard.sourceStack~="six" and checkInsert(draggingCard,six)==true then
         removeFromStack( draggingCard)
@@ -220,7 +226,7 @@ function viable(x,y)
 
     draggingCard.sourceStack="six"
     prevx=sixx
-    prevy=100*(#six-1)
+    prevy=offsety*(#six-1)
   end
  if x>sevenx-49 and x<sevenx+49 and draggingCard.sourceStack~="seven" and checkInsert(draggingCard,seven)==true then
        removeFromStack( draggingCard)
@@ -228,7 +234,7 @@ function viable(x,y)
 
     draggingCard.sourceStack="seven"
     prevx=sevenx
-    prevy=100*(#seven-1)
+    prevy=offsety*(#seven-1)
   end
   if x>sevenx+100 and y<150 and draggingCard.sourceStack~="hearts" and checkscore(draggingCard,"Hearts")==true then
     removeFromStack( draggingCard)
@@ -269,7 +275,7 @@ end
 function check_draggable()
   draggable ={}
   table.insert(draggable,draw[1])
-    local possibleStacks = {draw,one, two, three, four, five, six, seven,hearts,tiles,clovers,pikes}
+    local possibleStacks = {one, two, three, four, five, six, seven,hearts,tiles,clovers,pikes}
         for _, stack in ipairs(possibleStacks) do
           if #stack> 0 then
           stack[1].face=true
@@ -283,11 +289,12 @@ function check_draggable()
 end
 end 
 function start()
+   offsety=60
   for i =1,1,-1 do
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 100*(i-1)
+       offset= offsety*(i-1)
        card.sourceStack="one"
        card.position=Vector(onex,0+offset)
        table.insert(visible, card) 
@@ -298,7 +305,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 100*(i-1)
+       offset= offsety*(i-1)
        card.sourceStack="two"
        card.position=Vector(twox,offset)
        table.insert(visible, card) 
@@ -309,7 +316,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 100*(i-1)
+       offset= offsety*(i-1)
        card.sourceStack="three"
        card.position=Vector(threex,offset)
        table.insert(visible, card) 
@@ -320,7 +327,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset=100*(i-1)
+       offset=offsety*(i-1)
        card.sourceStack="four"
        card.position=Vector(fourx,offset)
        table.insert(visible, card) 
@@ -331,7 +338,7 @@ function start()
     local index = 1
        local card = deck[index]
        card.face=false
-       offset= 100*(i-1)
+       offset= offsety*(i-1)
        card.sourceStack="five"
        card.position=Vector(fivex,offset)
        table.insert(visible, card) 
@@ -343,7 +350,7 @@ function start()
        local card = deck[index]
        card.face=false
        card.sourceStack="six"
-       offset= 100*(i-1)
+       offset=offsety*(i-1)
        card.position=Vector(sixx,offset)
        table.insert(visible, card) 
        table.insert(six, card) 
@@ -354,7 +361,7 @@ function start()
        local card = deck[index]
        card.face=false
        card.sourceStack="seven"
-       offset=100*(i-1)
+       offset=offsety*(i-1)
        card.position=Vector(sevenx,offset)
        table.insert(visible, card) 
        table.insert(seven, card) 
